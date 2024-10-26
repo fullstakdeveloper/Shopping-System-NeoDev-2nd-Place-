@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 const app = express();
-import { scanItem, pay, getLog } from "./data";
+import { scanItem, pay, getLog, getProducts } from "./data";
 
 app.use(express.json());
 app.use(cors());
@@ -37,6 +37,16 @@ app.get("/logs", async (req, res) => {
     try {
         const log = await getLog(sdn, edn);
         res.status(200).json({ status: "Success", logs: log });
+    } catch (e) {
+        res.status(500).json({ status: e });
+    }
+});
+
+app.get("/products", async (req, res) => {
+    try {
+        const prods = await getProducts();
+        console.log(prods);
+        res.status(200).json({ status: "Success", products: prods });
     } catch (e) {
         res.status(500).json({ status: e });
     }

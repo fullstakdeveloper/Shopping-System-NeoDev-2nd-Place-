@@ -5,7 +5,7 @@ export async function getProducts() {
     return products;
 }
 
-export async function getLog(start: number|undefined, end: number|undefined) {
+export async function getLog(start: number | undefined, end: number | undefined) {
     const transactions = await stripe.balanceTransactions.list({
         created: {
             gte: start,
@@ -14,6 +14,7 @@ export async function getLog(start: number|undefined, end: number|undefined) {
         limit: 100,
     });
 
+    console.log({ transactions, start, end });
     return transactions;
 }
 
