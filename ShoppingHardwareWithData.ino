@@ -4,6 +4,9 @@
 //#include "Arduino_LED_Matrix.h"   // Include the LED_Matrix library
 //#include "frames.h"   
 
+
+
+
 //ArduinoLEDMatrix matrix;          // Create an instance of the ArduinoLEDMatrix class
 
 #define RST_PIN         5           // Configurable, see typical pin layout above
@@ -14,6 +17,9 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance
 String cardUID; // Variable to store the card UID as a string
 String cardType;
 String cardDetails;
+
+String lastClient = "";
+String productUID = "";
 
 // WiFi credentials
 const char* ssid = "DEN1880"; // Your network SSID (name)
@@ -88,10 +94,10 @@ void loop() {
   Serial.println(cardUID);
 
   //---------------------------------Access and print card type
-  Serial.print(F("Tag Type: "));
 
   byte buffer2[18];
   block = 1;
+
   cardType = "";
 
   // Get type from card
@@ -111,14 +117,10 @@ void loop() {
 
   //PRINT card type and store it in string cardType
   for (uint8_t i = 0; i < 16; i++) {
-    // Serial.write(buffer2[i] );
     cardType += (char)buffer2[i];
   }
 
-  Serial.println(cardType);
-
-  //--------------------------------------- Access and print card details
-  Serial.print(F("Details :"));
+  // --------------------------------------- Access and store card details
 
   byte buffer1[18];
 
@@ -142,7 +144,7 @@ void loop() {
     return;
   }
 
-  //Print Card details
+  //Create Card details variable
   for (uint8_t i = 0; i < 16; i++)
   {
     if (buffer1[i] != 32)
@@ -152,39 +154,61 @@ void loop() {
     }
   }
 
-  Serial.println(cardDetails);
-
   Serial.print(" ");
 
-  // Make an API request
-  if (WiFi.status() == WL_CONNECTED) {
-    WiFiClient client;
-    
-    // Connect to the server
-    if (client.connect(server, 80)) { // Use port 80 for HTTP
-      client.println("POST /item HTTP/1.1"); // Replace with your API endpoint
-      client.println("Host: classic-collie-ultimately.ngrok-free.app"); // Change to your API host
-      client.println("{rfid_tag:\"" + cardUID + "\"}");
-      client.println("{rfid_type:\"" + cardType + "\"}");
-      client.println("{rfid_details:\"" + cardDetails + "\"}");
-      client.println("Connection: close");
-      client.println(); // End of header
-      
-      // Wait for the server response
-      while (client.connected() || client.available()) {
-        if (client.available()) {
-          String line = client.readStringUntil('\n');
-          Serial.println(line); // Print the server response
-        }
-      }
-      client.stop(); // Disconnect
-    } else {
-      Serial.println("Connection failed");
-    }
-  } else {
-    Serial.println("WiFi not connected");
+// Trim whitespace
+  cardType.trim();
+  cardDetails.trim();
+
+  if (cardType.equals("client")) {
+    lastClient = cardUID;
+    Serial.println("Client detected, storing last card UID");
   }
 
+  else {
+    productUID = cardUID;
+    Serial.println("Product detected, sending API request");
+
+    String jsonPayload = "{\"rfid_tag\":\"" + productUID + "\",\"customer_id\":\"" + lastClient + "\"}";
+      int payloadLength = jsonPayload.length();
+
+    // Make an API request
+    if (WiFi.status() == WL_CONNECTED) {
+      WiFiClient client;
+      
+      // client.setInsecure();
+      
+      // String jsonPayload = "{\"rfid_tag\":\"" + productUID + "\",\"customer_id\":\"" + lastClient + "\"}";
+      // int payloadLength = jsonPayload.length();
+
+      // Connect to the server
+      if (client.connect(server, 80)) { // Use port 80 for HTTP, 443 for HTTPS
+        client.println("POST /item HTTP/1.1"); // Replace with your API endpoint
+        client.println("Host: classic-collie-ultimately.ngrok-free.app"); // Change to your API host
+        // client.println("{rfid_tag:\"" + productUID + "\",customer_id:\"" + lastClient + "\"}");
+        client.println("Content-Type: application/json");
+        client.println("Connection: close");
+        client.print("Content-Length: ");
+        client.println(payloadLength);
+        client.println();
+        client.println(jsonPayload);
+        
+        // Wait for the server response
+        while (client.connected() || client.available()) {
+          if (client.available()) {
+            String line = client.readStringUntil('\n');
+            Serial.println(line); // Print the server response
+          }
+        }
+        client.stop(); // Disconnect
+      } else {
+        Serial.println("Connection failed");
+      }
+    } else {
+      Serial.println("WiFi not connected");
+    }
+
+  }
   Serial.println(F("\n**End Reading**\n"));
   //matrix.clear();
 
