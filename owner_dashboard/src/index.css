@@ -1,0 +1,25 @@
+@import url('https://bomberfish.ca/typography.css');
+body {
+  margin: 0;
+  font-family: var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,h2,h3 {
+  font-family: var(--font-display);
+}
+
+code {
+  font-family: var(--font-mono), source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+/* 
+@font-face {
+  font-family: "Agrandir";
+  src: url("./fonts/Agrandir-TextBold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+} */

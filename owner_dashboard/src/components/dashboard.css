@@ -1,0 +1,65 @@
+.infoStack{
+    text-align: center;
+    color:white;
+}
+#transactionBody{
+    border-radius:15px;
+    background-color:#534B62;
+    display: inline-block;
+    /* padding-left:30px;
+    padding-right:  30px;
+    padding-top:30px;
+    padding-bottom:30px; */
+    height:20px;
+    overflow-y: scroll;
+    width:fit-content;
+    margin-bottom: 50px;
+    width: 800px;
+    height: 300px;
+}
+#inventoryBody{
+    border-radius:15px;
+    background-color:#534B62;
+    display: inline-block;
+    /* padding-left:30px;
+    padding-right:30px;
+    padding-top:30px;
+    padding-bottom:30px; */
+    /* width:fit-content; */
+    overflow-y: scroll;
+    width: 800px;
+    height: 300px;
+}
+
+#infoStack {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.container{
+    margin:20px;
+}
+
+div.container::-webkit-scrollbar {
+    width: 10px; 
+}
+
+  /* Track */
+div.container::-webkit-scrollbar-track {
+    background:#D0BCD5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+}
+  /* Handle */
+div.container::-webkit-scrollbar-thumb {
+
+    background: #96deff;
+    border-radius: 15px;
+}
+  
+  /* Handle on hover */
+div.container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

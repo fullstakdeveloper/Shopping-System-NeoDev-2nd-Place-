@@ -1,0 +1,46 @@
+.navbar {
+    width: 100vw;
+    height: 50px;   
+    background-color: #96deff;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    font-size: 20px;
+    justify-content: center;
+    font-family: "Lexend";
+}
+
+.navbar .about {
+    margin-right: 75px;
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 20px;
+    font-family: var(--font-display), sans-serif;
+}
+
+.navbar .dash {
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 20px;
+    font-family: var(--font-display), sans-serif;
+}
+
+.navbar .about:hover {
+    color: black;
+}
+
+.navbar .dash:hover {
+    color: black;
+}
+
+
+
+.navbar .logo {
+    /* transform: scale(0.1); */
+    padding:none;
+    margin-right: 50px;
+}
+
+
