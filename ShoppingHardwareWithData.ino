@@ -85,6 +85,7 @@ void loop() {
 
   byte buffer2[18];
   block = 1;
+  cardType = "";
 
   // Get type from card
   status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, 1, &key, &(mfrc522.uid)); //line 834
@@ -103,8 +104,8 @@ void loop() {
 
   //PRINT card type and store it in string cardType
   for (uint8_t i = 0; i < 16; i++) {
-    Serial.write(buffer2[i] );
-    cardType += buffer2[i];
+    // Serial.write(buffer2[i] );
+    cardType += (char)buffer2[i];
   }
 
   Serial.println(cardType);
@@ -116,6 +117,8 @@ void loop() {
 
   block = 4;
   len = 18;
+
+  cardDetails = "";
 
   //Get details from card
   status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, 4, &key, &(mfrc522.uid)); //line 834 of MFRC522.cpp file
@@ -137,8 +140,8 @@ void loop() {
   {
     if (buffer1[i] != 32)
     {
-      Serial.write(buffer1[i]);
-      cardDetails += buffer1[i];
+      // Serial.write(buffer1[i]);
+      cardDetails += (char)buffer1[i];
     }
   }
 
@@ -156,7 +159,9 @@ void loop() {
     if (client.connect(server, 80)) { // Use port 80 for HTTP
       client.println("POST /item HTTP/1.1"); // Replace with your API endpoint
       client.println("Host: yourapi.com"); // Change to your API host
-      client.println("{rfid_tag:\"" + cardUID + "\"}")
+      client.println("{rfid_tag:\"" + cardUID + "\"}");
+      client.println("{rfid_type:\"" + cardType + "\"}");
+      client.println("{rfid_details:\"" + cardDetails + "\"}");
       client.println("Connection: close");
       client.println(); // End of header
       
