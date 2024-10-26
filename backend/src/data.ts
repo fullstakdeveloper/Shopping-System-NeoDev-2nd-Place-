@@ -2,6 +2,7 @@ import stripe from "./stripe";
 
 export async function getProducts() {
     const products = await stripe.products.list();
+    console.log(products);
     return products;
 }
 

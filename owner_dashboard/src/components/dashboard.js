@@ -104,7 +104,7 @@ const InventoryDataFetcher = () => {
                 }
 
                 const result = await response.json();
-                logData = JSON.stringify(result);
+                logData = result.products.data;
 
                 console.log(logData);
                 setData(logData);
@@ -130,7 +130,7 @@ const InventoryDataFetcher = () => {
         <div>
             {/* <h1>{data}</h1> */}
             <h1>Fetched Data:</h1>
-            <pre>{data}</pre>
+            <pre>{data.map((p) => p.name + " " + p.metadata.stock)}</pre>
         </div>
     );
 };
