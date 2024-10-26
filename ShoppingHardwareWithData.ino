@@ -1,6 +1,10 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include <WiFi.h> // Include the appropriate library for your WiFi module
+//#include "Arduino_LED_Matrix.h"   // Include the LED_Matrix library
+//#include "frames.h"   
+
+//ArduinoLEDMatrix matrix;          // Create an instance of the ArduinoLEDMatrix class
 
 #define RST_PIN         5           // Configurable, see typical pin layout above
 #define SS_PIN          10          // Configurable, see typical pin layout above
@@ -14,10 +18,11 @@ String cardDetails;
 // WiFi credentials
 const char* ssid = "DEN1880"; // Your network SSID (name)
 const char* password = "Den@14Erb!"; // Your network password
-const char* server = "yourapi.com"; 
+const char* server = "classic-collie-ultimately.ngrok-free.app"; 
 
 void setup() {
-  Serial.begin(9600);                                           // Initialize serial communications with the PC
+  Serial.begin(9600);
+  //matrix.begin();                 // Initialize the LED matrix                                           // Initialize serial communications with the PC
   SPI.begin();                                                  // Init SPI bus
   mfrc522.PCD_Init();                                           // Init MFRC522 card
   Serial.println(F("Read personal data on a MIFARE PICC:"));    // shows in serial that it is ready to read
@@ -67,6 +72,8 @@ void loop() {
   }
 
   Serial.println(F("**Card Detected:**"));
+
+  //matrix.loadFrame(fullOn);
 
   // Store UID in a variable
   cardUID = "";
@@ -149,8 +156,6 @@ void loop() {
 
   Serial.print(" ");
 
-  
-
   // Make an API request
   if (WiFi.status() == WL_CONNECTED) {
     WiFiClient client;
@@ -158,7 +163,7 @@ void loop() {
     // Connect to the server
     if (client.connect(server, 80)) { // Use port 80 for HTTP
       client.println("POST /item HTTP/1.1"); // Replace with your API endpoint
-      client.println("Host: yourapi.com"); // Change to your API host
+      client.println("Host: classic-collie-ultimately.ngrok-free.app"); // Change to your API host
       client.println("{rfid_tag:\"" + cardUID + "\"}");
       client.println("{rfid_type:\"" + cardType + "\"}");
       client.println("{rfid_details:\"" + cardDetails + "\"}");
@@ -181,6 +186,8 @@ void loop() {
   }
 
   Serial.println(F("\n**End Reading**\n"));
+  //matrix.clear();
+
 
   delay(1000); // change value if you want to read cards faster
 
