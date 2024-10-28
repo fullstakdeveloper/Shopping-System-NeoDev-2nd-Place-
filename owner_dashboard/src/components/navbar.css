@@ -7,7 +7,7 @@
     flex-direction: row;
     font-size: 20px;
     justify-content: center;
-    font-family: "Lexend";
+    font-family: var(--font-display), "Lexend";
 }
 
 .navbar .about {
@@ -23,6 +23,7 @@
     border: none;
     background-color: transparent;
     color: white;
+    font-weight: 600;
     font-size: 20px;
     font-family: var(--font-display), sans-serif;
 }

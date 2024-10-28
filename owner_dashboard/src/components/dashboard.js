@@ -63,8 +63,12 @@ const TransactionDataFetcher = () => {
     return (
         <div>
             {/* <h1>{data}</h1> */}
-            <h1>Fetched Data:</h1>
-            <pre>{data.map((datum) => datum.amount / 100 + " " + datum.description)}</pre>
+            {/* <h1>Fetched Data:</h1> */}
+            <pre>
+                {data.map(
+                    (datum) => "$" + datum.amount / 100 + " invoice for " + datum.description
+                )}
+            </pre>
         </div>
     );
 };
@@ -129,8 +133,9 @@ const InventoryDataFetcher = () => {
     return (
         <div>
             {/* <h1>{data}</h1> */}
-            <h1>Fetched Data:</h1>
-            <pre>{data.map((p) => p.name + " " + p.metadata.stock)}</pre>
+            {/* <h1>Fetched Data:</h1> */}
+
+            <pre>{data.map((p) => p.name + ": " + p.metadata.stock + " in stock")}</pre>
         </div>
     );
 };
